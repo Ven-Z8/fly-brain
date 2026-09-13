@@ -18,6 +18,7 @@ grep -Fq -- '--pytorch' scripts/runpod_p9_smoke.sh
 grep -Fq 'read_parquet' scripts/runpod_p9_smoke.sh
 grep -Fq 'runpod_p9_smoke_$(date -u +%Y%m%dT%H%M%SZ)_$$' scripts/runpod_p9_smoke.sh
 grep -Fq 'unset FLY_BRAIN_DISABLE_SPIKE_IO' scripts/runpod_p9_smoke.sh
+grep -Fq 'mkdir -p data/results' scripts/runpod_p9_smoke.sh
 grep -Fq 'if not torch.cuda.is_available():' scripts/runpod_p9_smoke.sh
 grep -Fq 'RUN_LABEL="$run_label" python -' scripts/runpod_p9_smoke.sh
 grep -Fq 'os.environ["RUN_LABEL"]' scripts/runpod_p9_smoke.sh

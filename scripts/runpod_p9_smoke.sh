@@ -20,6 +20,7 @@ done
 source .venv/bin/activate
 run_label="runpod_p9_smoke_$(date -u +%Y%m%dT%H%M%SZ)_$$"
 unset FLY_BRAIN_DISABLE_SPIKE_IO
+mkdir -p data/results
 
 python - <<'PY'
 import torch
