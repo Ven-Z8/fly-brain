@@ -11,6 +11,7 @@ grep -Fq 'runpod_p9_smoke_<UTC timestamp>_<pid>' docs/RUNPOD_WORKFLOW.md
 grep -Fq 'data/2025_Completeness_783.csv' docs/RUNPOD_WORKFLOW.md
 grep -Fq 'data/benchmark-results.csv' docs/RUNPOD_WORKFLOW.md
 grep -Fq 'nvidia-smi' scripts/runpod_prepare.sh
+grep -Fq -- 'python3 -m venv --system-site-packages .venv' scripts/runpod_prepare.sh
 grep -Fq 'torch.cuda.is_available()' scripts/runpod_prepare.sh
 grep -Fq -- '--experiment p9' scripts/runpod_p9_smoke.sh
 grep -Fq -- '--pytorch' scripts/runpod_p9_smoke.sh

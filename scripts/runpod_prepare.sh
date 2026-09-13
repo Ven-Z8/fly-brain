@@ -15,7 +15,10 @@ for data_file in data/2025_Completeness_783.csv data/2025_Connectivity_783.parqu
     fi
 done
 
-python3 -m venv .venv
+# The selected RunPod PyTorch template already provides CUDA-enabled Torch.
+# Inheriting system packages avoids downloading a duplicate GPU wheel while
+# retaining the pip fallback below for images that do not include it.
+python3 -m venv --system-site-packages .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install torch numpy==1.26.4 pandas pyarrow scipy tqdm joblib matplotlib
