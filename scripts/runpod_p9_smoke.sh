@@ -18,14 +18,30 @@ for data_file in data/2025_Completeness_783.csv data/2025_Connectivity_783.parqu
 done
 
 source .venv/bin/activate
-python main.py --experiment p9 --pytorch --t_run 0.1 --n_run 1 --run-label runpod_p9_smoke
+run_label="runpod_p9_smoke_$(date -u +%Y%m%dT%H%M%SZ)_$$"
+unset FLY_BRAIN_DISABLE_SPIKE_IO
 
 python - <<'PY'
+import torch
+
+if not torch.cuda.is_available():
+    raise SystemExit("PyTorch cannot access CUDA")
+PY
+
+python main.py --experiment p9 --pytorch --t_run 0.1 --n_run 1 --run-label "$run_label"
+
+RUN_LABEL="$run_label" python - <<'PY'
+import os
 from pathlib import Path
 
 import pandas as pd
 
-output_path = Path("data/results/runpod_p9_smoke/round_01/pytorch_t0.1s_n1.parquet")
+output_path = (
+    Path("data/results")
+    / os.environ["RUN_LABEL"]
+    / "round_01"
+    / "pytorch_t0.1s_n1.parquet"
+)
 if not output_path.is_file():
     raise SystemExit(f"Missing smoke output: {output_path}")
 

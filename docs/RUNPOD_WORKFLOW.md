@@ -68,9 +68,32 @@ unreviewed source edits there.  Make code changes on the Mac, push them to
 ## Persistent RunPod data boundary
 
 Keep the repository and all runtime assets on RunPod persistent storage.  Git
-contains source, documentation, and small scripts only.  The RunPod checkout
-owns `.venv/`, CUDA and PyTorch installations, FlyWire data, generated sparse
-weights, logs, and Parquet results; do not add any of them to Git.
+tracks source, documentation, small scripts, and the required input files
+`data/2025_Completeness_783.csv`, `data/2025_Connectivity_783.parquet`, and
+`data/benchmark-results.csv`.  The benchmark results CSV may show modifications
+after runs.  The RunPod checkout owns `.venv/`, CUDA and PyTorch installations,
+generated sparse weights, logs, and generated Parquet results; do not add those
+runtime artifacts to Git.
+
+## Prepare and smoke-test RunPod
+
+From the RunPod repository root, first prepare the CUDA-capable PyTorch
+environment and validate the two required data files:
+
+```bash
+./scripts/runpod_prepare.sh
+```
+
+Then run the isolated P9 PyTorch smoke check:
+
+```bash
+./scripts/runpod_p9_smoke.sh
+```
+
+The smoke script creates its own label, `runpod_p9_smoke_<UTC timestamp>_<pid>`,
+and validates only the new output at
+`data/results/runpod_p9_smoke_<UTC timestamp>_<pid>/round_01/pytorch_t0.1s_n1.parquet`.
+Copy the label printed by the script when retrieving the result.
 
 ## Copy a result back to the Mac
 
@@ -79,6 +102,6 @@ RunPod SSH host and port shown by RunPod):
 
 ```bash
 rsync -avP -e 'ssh -p <RUNPOD_SSH_PORT>' \
-  root@<RUNPOD_SSH_HOST>:/workspace/fly-brain/data/results/runpod_p9_smoke/ \
-  ./data/results/runpod_p9_smoke/
+  root@<RUNPOD_SSH_HOST>:/workspace/fly-brain/data/results/<RUN_LABEL>/ \
+  ./data/results/<RUN_LABEL>/
 ```
